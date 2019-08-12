@@ -27,6 +27,7 @@ class YawController(object):
             max_yaw_rate = abs(self.max_lat_accel / current_velocity);
             angular_velocity = max(-max_yaw_rate, min(max_yaw_rate, angular_velocity))
 
+        '''
         angular_velocity_error = angular_velocity - current_angular_velocity
         if abs(angular_velocity_error) < VELOCITY_ERROR_MIN_THRESHOLD: 
             steering_angle = self.last_steering_angle
@@ -35,8 +36,8 @@ class YawController(object):
                 angular_velocity = angular_velocity - (angular_velocity_error * 0.5) # add dampening factoring by reducing the angular_velocity to make it closer to the current angular velocity
             steering_angle = self.get_angle(max(current_velocity, self.min_speed) / angular_velocity) if abs(angular_velocity) > 0. else 0.0;
             self.last_steering_angle = steering_angle
-
-        #steering_angle = self.get_angle(max(current_velocity, self.min_speed) / angular_velocity) if abs(angular_velocity) > 0. else 0.0;
-        #self.last_steering_angle = steering_angle
+        '''
+        steering_angle = self.get_angle(max(current_velocity, self.min_speed) / angular_velocity) if abs(angular_velocity) > 0. else 0.0;
+        self.last_steering_angle = steering_angle
     
         return steering_angle
