@@ -63,8 +63,7 @@ class DBWNode(object):
                                     wheel_base=wheel_base,
                                     steer_ratio=steer_ratio,
                                     max_lat_accel=max_lat_accel,
-                                    max_steer_angle=max_steer_angle
-                                    )
+                                    max_steer_angle=max_steer_angle)
 
         # Topic subscriptions
         rospy.Subscriber('/vehicle/dbw_enabled', Bool, self.dbw_enabled_cb)
