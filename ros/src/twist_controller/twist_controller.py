@@ -55,7 +55,7 @@ class Controller(object):
 
     def compute_throttle_params(self, linear_velocity, current_velocity, current_time):
     	velocity_error  = linear_velocity - current_velocity
-    	if self.last_time not None: 
+    	if not self.last_time is None: 
     		sample_time = current_time - self.last_time
     	else:
     		sample_time = current_time
