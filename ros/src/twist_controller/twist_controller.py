@@ -14,7 +14,7 @@ PID_PARAMS = {
 	'Max_Throttle':0.2
 }
 LPF_PARAMS = {
-	'tau': 0.5 # 1/(2pi*tau) is the cutoff frequency
+	'tau': 0.5, # 1/(2pi*tau) is the cutoff frequency
 	'Sample_Time': 0.02 # Sample Time 
 }
 class Controller(object):
