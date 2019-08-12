@@ -88,12 +88,13 @@ class Controller(object):
 
 
         current_time = rospy.get_time()
-        self.update_lastknowngood_states(current_velocity, current_time)
         
         # Use throttle controller to get the updated acceleration 
         throttle, brake = self.compute_throttle_params(linear_velocity, current_velocity, current_time)
         rospy.loginfo("Updated throttle: {}".format(throttle))
         rospy.loginfo("Updated brake: {}".format(brake))
 
+        self.update_lastknowngood_states(current_velocity, current_time)
+        
         return throttle, brake, steering 
 
