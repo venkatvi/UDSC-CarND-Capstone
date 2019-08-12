@@ -33,7 +33,7 @@ class Controller(object):
     	self.yaw_controller = YawController(wheel_base, steer_ratio, MIN_SPEED, max_lat_accel, max_steer_angle)
 
     	# Instantiate throttle controller - PIDController
-    	self.throttle_controler = PID(PID_PARAMS.get('Kp'), PID_PARAMS.get('Ki'), PID_PARAMS.get('Kd'), PID_PARAMS.get('Min_Throttle'), PID_PARAMS.get('Max_Throttle'))
+    	self.throttle_controller = PID(PID_PARAMS.get('Kp'), PID_PARAMS.get('Ki'), PID_PARAMS.get('Kd'), PID_PARAMS.get('Min_Throttle'), PID_PARAMS.get('Max_Throttle'))
 
     	# Instantiate a low pass filter for averaging the velocity inputs 
     	self.velocity_lowPassFilter = LowPassFilter(LPF_PARAMS.get('tau'), LPF_PARAMS.get('Sample_Time'))

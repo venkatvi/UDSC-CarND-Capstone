@@ -13,6 +13,7 @@ class YawController(object):
 
         self.min_angle = -max_steer_angle
         self.max_angle = max_steer_angle
+        self.last_steering_angle = None
         pass
 
     def get_angle(self, radius):
