@@ -90,7 +90,7 @@ class Controller(object):
         # Use throttle controller to get the updated acceleration 
         throttle, brake = self.compute_throttle_params(linear_velocity, current_velocity, current_time)
         rospy.loginfo("Updated throttle: {}".format(throttle))
-        rospy.loginfo("Updated brake: {0}".format(brake))
+        rospy.loginfo("Updated brake: {}".format(brake))
 
         return throttle, brake, steering 
 
