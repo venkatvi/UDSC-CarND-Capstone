@@ -72,7 +72,7 @@ class DBWNode(object):
 
         # Member variables 
         self.current_velocity = None
-        self.currrent_angular_velocity = None
+        self.current_angular_velocity = None
         self.dbw_enabled = None
         self.linear_velocity = None
         self.angular_velocity = None
