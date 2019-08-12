@@ -74,14 +74,14 @@ class Controller(object):
         	return 0., 0., 0.
 
         # Smoothen the velocity input using low pass filter
-        rospy.logwarn("Current velocity to LowPassFilter: {0}", current_velocity)
+        rospy.loginfo("Current velocity to LowPassFilter: {}".format(current_velocity))
         current_velocity = self.velocity_lowPassFilter.filter(current_velocity); 
-        rospy.logwarn("Updated velocity: {0}", current_velocity)
+        rospy.loginfo("Updated velocity: {}".format(current_velocity))
 
         # Use yaw controller to get the desired steering angle given the linear and angular velocity 
         # from the car simulator (via dbw node) and the current step's velocity
         steering = self.yaw_controller.get_steering(linear_velocity, angular_velocity, current_velocity, current_angular_velocity)
-        rospy.logwarn("Updated steering: {0}", steering)
+        rospy.loginfo("Updated steering: {}".format(steering))
 
 
         current_time = rospy.get_time()
@@ -89,8 +89,8 @@ class Controller(object):
         
         # Use throttle controller to get the updated acceleration 
         throttle, brake = self.compute_throttle_params(linear_velocity, current_velocity, current_time)
-        rospy.logwarn("Updated throttle: {0}", throttle)
-        rospy.logwarn("Updated brake: {0}", brake)
+        rospy.loginfo("Updated throttle: {}".format(throttle))
+        rospy.loginfo("Updated brake: {0}".format(brake))
 
         return throttle, brake, steering 
 
