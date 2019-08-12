@@ -68,7 +68,7 @@ class Controller(object):
     		brake = abs(decel) * self.vehicle_mass * self.wheel_radius # torque Nm
     	return throttle, brake 
 
-    def control(self, current_velocity, dbw_enabled, linear_velocity, angular_velocity):
+    def control(self, current_velocity, current_angular_velocity, dbw_enabled, linear_velocity, angular_velocity):
         if not dbw_enabled:
         	self.throttle_controller.reset()
         	return 0., 0., 0.
@@ -80,7 +80,7 @@ class Controller(object):
 
         # Use yaw controller to get the desired steering angle given the linear and angular velocity 
         # from the car simulator (via dbw node) and the current step's velocity
-        steering = self.yaw_controller.get_steering(linear_velocity, angular_velocity, current_velocity)
+        steering = self.yaw_controller.get_steering(linear_velocity, angular_velocity, current_velocity, current_angular_velocity)
         rospy.logwarn("Updated steering: {0}", steering)
 
 

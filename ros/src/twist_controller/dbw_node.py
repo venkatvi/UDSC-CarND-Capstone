@@ -89,6 +89,7 @@ class DBWNode(object):
         self.angular_velocity = msg.twist.angular.z
     def velocity_cb(self, msg):
         self.current_velocity = msg.twist.linear.x 
+        self.current_angular_velocity = msg.twist.angular.z
         
     def run(self):
         rate = rospy.Rate(50) # 50Hz
@@ -96,6 +97,7 @@ class DBWNode(object):
             # Get predicted throttle, brake, and steering using `twist_controller`
             if not None in (self.current_velocity, self.linear_velocity, self.angular_velocity):
                 self.throttle, self.brake, self.steering = self.controller.control(self.current_velocity,
+                                                                self.current_angular_velocity,
                                                                 self.dbw_enabled,
                                                                 self.linear_velocity, 
                                                                 self.angular_velocity);
