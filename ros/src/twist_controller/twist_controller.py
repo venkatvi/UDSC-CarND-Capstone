@@ -11,12 +11,13 @@ PID_PARAMS = {
 	'Ki': 0.1, 
 	'Kd': 0.0, 
 	'Min_Throttle': 0.0, 
-	'Max_Throttle':0.2
+	'Max_Throttle':0.4
 }
 LPF_PARAMS = {
 	'tau': 0.5, # 1/(2pi*tau) is the cutoff frequency
 	'Sample_Time': 0.02 # Sample Time 
 }
+MAX_BRAKE=400 #Nm
 class Controller(object):
     def __init__(self, 
     			vehicle_mass, 
@@ -45,7 +46,7 @@ class Controller(object):
     	self.accel_limit = accel_limit
     	self.wheel_radius = wheel_radius
 
-    	self.last_time = None
+    	self.last_time = rospy.get_time()
         self.last_velocity = None
         pass
 
@@ -59,16 +60,20 @@ class Controller(object):
     		sample_time = current_time - self.last_time
     	else:
     		sample_time = current_time
+        rospy.loginfo("Sample time: {}".format(sample_time))
+        rospy.loginfo("Velocity error: {}".format(velocity_error))
     	throttle = self.throttle_controller.step(velocity_error, sample_time)
+        rospy.loginfo("Updated throttle: {}".format(throttle))
+    	
     	brake = 0
 
     	if linear_velocity == 0.0 and current_velocity < MIN_SPEED:
     		throttle = 0
-    		brake = 400 # Nm- to hold the car in place if we are stopped at light, accel = 1 m/s^2
+    		brake = MAX_BRAKE # Nm- to hold the car in place if we are stopped at light, accel = 1 m/s^2
     	elif throttle < MIN_SPEED and velocity_error < 0: 
     		throttle = 0
     		decel = max(velocity_error, self.decel_limit)
-    		brake = abs(decel) * self.vehicle_mass * self.wheel_radius # torque Nm
+    		brake = min(MAX_BRAKE, abs(decel) * self.vehicle_mass * self.wheel_radius) # torque Nm
     	return throttle, brake 
 
     def control(self, current_velocity, current_angular_velocity, dbw_enabled, linear_velocity, angular_velocity):
@@ -77,10 +82,8 @@ class Controller(object):
         	return 0., 0., 0.
 
         # Smoothen the velocity input using low pass filter
-        rospy.loginfo("Current velocity to LowPassFilter: {}".format(current_velocity))
         current_velocity = self.velocity_lowPassFilter.filter(current_velocity); 
-        rospy.loginfo("Updated velocity: {}".format(current_velocity))
-
+        
         # Use yaw controller to get the desired steering angle given the linear and angular velocity 
         # from the car simulator (via dbw node) and the current step's velocity
         steering = self.yaw_controller.get_steering(linear_velocity, angular_velocity, current_velocity, current_angular_velocity)
@@ -91,10 +94,8 @@ class Controller(object):
         
         # Use throttle controller to get the updated acceleration 
         throttle, brake = self.compute_throttle_params(linear_velocity, current_velocity, current_time)
-        rospy.loginfo("Updated throttle: {}".format(throttle))
+        #rospy.loginfo("Updated throttle: {}".format(throttle))
         rospy.loginfo("Updated brake: {}".format(brake))
 
         self.update_lastknowngood_states(current_velocity, current_time)
-        
         return throttle, brake, steering 
-
